@@ -17,6 +17,11 @@ public class ProductsPage extends BasePage{
         super(driver);
     }
 
+ // Шаблон XPath для кнопки "Add to cart" 
+// %s будет заменено на реальное название продукта при вызове метода
+private static final String ADD_TO_CART_PATTERN = 
+    "//div[text()='%s']/ancestor::div[@class='inventory_item']//button";
+ 
     // Открывает страницу с продуктами
     public void open() {
         driver.get(BASE_URL + "inventory.html");
@@ -26,14 +31,11 @@ public class ProductsPage extends BasePage{
     public boolean isPageOpened() {
         return driver.findElement(TITLE).isDisplayed();
     }
-
-    /*
-     Формирование XPath для поиска кнопки добавления в корзину:
-    1. Находим div с текстом = названию товара
-    2. Поднимаемся до родительского div с классом inventory_item
-    3. Ищем внутри него кнопку (Add to cart)
-     */
+ 
+     // Метод добавляет товар в корзину по его названию
     public void addToCart(String productName) {
-        driver.findElement(By.xpath("//div[text()='" + productName + "']/ancestor::div[@class='inventory_item']//button")).click();
+        String xpath = String.format(ADD_TO_CART_PATTERN, productName);
+     // Находим элемент кнопки "Add to cart" по XPath и кликаем по ней
+        driver.findElement(By.xpath(xpath)).click();
     }
 }
