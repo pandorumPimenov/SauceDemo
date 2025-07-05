@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="SauceDemo Test Suite"> <!-- Основной контейнер для набора тестов -->
+    <listeners>
+        <!-- TestListener - логирует начало/конец тестов и измеряет время выполнения -->
+        <listener class-name="tests.TestListener"/>
+        <!-- AnnotationTransformer - автоматически добавляет RetryAnalyzer
+          ко всем тестам для повторного запуска упавших тестов -->
+        <listener class-name="tests.AnnotationTransformer"/>
+    </listeners>
+    <test name="Login Tests"> <!-- Тестовый набор 1-->
+        <classes> <!-- Классы, содержащие тесты -->
+            <class name="tests.LoginTest"/>
+        </classes>
+    </test>
+    <test name="Cart Tests"> <!-- Тестовый набор 2-->
+        <classes>
+            <class name="tests.CartTests"/>
+        </classes>
+    </test>
+    <test name="SauceDemo Test"> <!-- Тестовый набор 3-->
+        <classes>
+            <class name="tests.SauceDemoTest"/>
+        </classes>
+    </test>
+</suite>

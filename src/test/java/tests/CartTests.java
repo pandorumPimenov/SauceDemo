@@ -1,13 +1,17 @@
 package tests;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import pages.CartPage;
-import pages.ProductsPage;
-
 
 // Тестовый класс для проверки функциональности корзины покупок:
 public class CartTests extends BaseTest {
+
+    @BeforeMethod
+    public void setUpTest() {
+        // Инициализация страницы логина
+        loginStandardUser();
+    }
 
     /*
     Тест проверки пустой корзины (пользователь ничего ранее в корзину не добавлял):
@@ -17,13 +21,10 @@ public class CartTests extends BaseTest {
     3. Открываем корзину
     4. Проверяем, что корзина пуста
      */
-    @Test
+    @Test(description = "Проверка, что корзина пуста после входа в систему",
+            testName = "Тест пустой корзины",priority = 1)
     public void testEmptyCart() {
-        // Инициализация страницы логина
-        loginStandardUser();
-
         // Переход на страницу корзины
-        CartPage cartPage = new CartPage(driver);
         cartPage.open();
 
         // Проверка, что корзина пуста
@@ -38,17 +39,13 @@ public class CartTests extends BaseTest {
     3. Переход в корзину
     4. Проверка наличия товара и его названия
      */
-    @Test
+    @Test(description = "Проверка добавления товара в корзину",
+            testName = "Тест добавления товара в корзину",priority = 2)
     public void testAddItemToCart() {
-        // Инициализация страницы логина
-        loginStandardUser();
-
         // Добавление товара в корзину
-        ProductsPage productsPage = new ProductsPage(driver);
         productsPage.addToCart("Sauce Labs Backpack");
 
         // Переход и проверки в корзине
-        CartPage cartPage = new CartPage(driver);
         cartPage.open();
 
         // Проверки:
@@ -66,17 +63,13 @@ public class CartTests extends BaseTest {
    4. Удаление товара
    5. Проверка, что корзина пуста
      */
-    @Test
+    @Test(description = "Проверка удаления товара из корзины",
+            testName = "Тест удаления товара из корзины",priority = 3)
     public void testRemoveItemFromCart() {
-        // Инициализация страницы логина
-        loginStandardUser();
-
         // Добавление товара в корзину
-        ProductsPage productsPage = new ProductsPage(driver);
         productsPage.addToCart("Sauce Labs Bike Light");
 
         // Удаление товара из корзины
-        CartPage cartPage = new CartPage(driver);
         cartPage.open();
         cartPage.removeItem();
 
@@ -93,18 +86,14 @@ public class CartTests extends BaseTest {
     3. Нажатие кнопки продолжения покупок
     4. Проверка возврата на страницу продуктов
      */
-    @Test
+    @Test(description = "Проверка работы кнопки 'Continue Shopping'",
+            testName = "Тест кнопки 'Continue Shopping'",priority = 4)
     public void testContinueShopping() {
-        // Инициализация страницы логина
-        loginStandardUser();
-
         // Проверка работы кнопки продолжения покупок
-        CartPage cartPage = new CartPage(driver);
         cartPage.open();
         cartPage.continueShopping();
 
         // Проверка, что вернулись на страницу продуктов
-        ProductsPage productsPage = new ProductsPage(driver);
         Assert.assertTrue(productsPage.isPageOpened(),
                 "Должны вернуться на страницу продуктов после нажатия Continue Shopping");
     }
@@ -118,17 +107,13 @@ public class CartTests extends BaseTest {
     4. Нажатие кнопки оформления заказа
     5. Проверка перехода на страницу оформления
      */
-    @Test
+    @Test(description = "Проверка перехода к оформлению заказа",
+            testName = "Тест перехода к оформлению заказа",priority = 5)
     public void testCheckoutNavigation() {
-        // Инициализация и выполнение логина
-        loginStandardUser();
-
-        // Добавление товара в корзину
-        ProductsPage productsPage = new ProductsPage(driver);
+        // Добавление товара в
         productsPage.addToCart("Sauce Labs Bolt T-Shirt");
 
         // Переход к оформлению заказа
-        CartPage cartPage = new CartPage(driver);
         cartPage.open();
         cartPage.checkout();
 

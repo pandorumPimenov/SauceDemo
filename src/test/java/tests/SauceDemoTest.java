@@ -1,36 +1,37 @@
 package tests;
 
-import org.openqa.selenium.By;
 import org.testng.annotations.Test;
-
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
 
 public class SauceDemoTest extends BaseTest{
 
-    @Test
+    @Test(description = "Проверка корректности добавления товара в корзину",
+            testName = "Тест добавления товара в корзину")
     public void testAddToCartAndVerify() {
-        driver.get("https://www.saucedemo.com/");
-        driver.findElement(By.id("user-name")).sendKeys("standard_user");
-        driver.findElement(By.id("password")).sendKeys("secret_sauce");
-        driver.findElement(By.id("login-button")).click();
-        assertTrue(driver.findElement(By.className("title")).isDisplayed());
-        String expectedItemName = driver.findElement(
-                By.cssSelector(".inventory_item_name")).getText();
-        String expectedItemPrice = driver.findElement(
-                By.cssSelector(".inventory_item_price")).getText();
-        driver.findElement(
-                By.cssSelector("button[data-test^='add-to-cart']")).click();
-        driver.findElement(By.className("shopping_cart_link")).click();
-        softAssert.assertEquals(
-                driver.findElement(By.cssSelector(".inventory_item_name")).getText(),
-                expectedItemName,
-                "Название товара не совпадает");
+        // Логинимся стандартным пользователем (метод из BaseTest)
+        loginStandardUser();
 
-        softAssert.assertEquals(
-                driver.findElement(By.cssSelector(".inventory_item_price")).getText(),
-                expectedItemPrice,
+        // Проверяем что страница продуктов открыта
+        softAssert.assertTrue(productsPage.isPageOpened(), "Страница с продуктами, открыта");
+
+        // Получаем название и цену первого товара на странице продуктов
+        String expectedItemName = productsPage.getFirstProductName();
+        String expectedItemPrice = productsPage.getFirstProductPrice();
+
+        // Добавляем первый товар в корзину
+        productsPage.addFirstProductToCart();
+
+        // Переходим в корзину
+        productsPage.goToCart();
+
+        // Проверяем что товар добавлен в корзину
+        softAssert.assertTrue(cartPage.isItemPresent(), "Cart is empty");
+
+        // Проверяем название и цену товара в корзине
+        softAssert.assertEquals(cartPage.getItemName(), expectedItemName,
+                "Название товара не совпадает");
+        softAssert.assertEquals(cartPage.getItemPrice(), expectedItemPrice,
                 "Цена товара не совпадает");
-        softAssert.assertAll();
+
+        softAssert.assertAll(); // Завершаем проверки
     }
 }
