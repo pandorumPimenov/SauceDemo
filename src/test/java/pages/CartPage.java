@@ -28,6 +28,8 @@ public class CartPage extends BasePage {
     // Локатор названия товара в корзине
     private final By ITEM_NAME = By.className("inventory_item_name");
 
+    private final By ITEM_PRICE = By.cssSelector(".inventory_item_price");
+
     // Конструктор класса CartPage
     public CartPage(WebDriver driver) {
         super(driver);
@@ -39,8 +41,9 @@ public class CartPage extends BasePage {
     }
 
     // Проверяет наличие товаров в корзине
+    // true если есть хотя бы один товар, false если корзина пуста
     public boolean isItemPresent() {
-        return !driver.findElements(CART_ITEM).isEmpty(); // true если есть хотя бы один товар, false если корзина пуста
+        return !driver.findElements(CART_ITEM).isEmpty();
     }
 
     // Удаляет товар из корзины
@@ -62,7 +65,14 @@ public class CartPage extends BasePage {
     }
 
     // Получает название товара в корзине
+    // и возвращает текст названия первого товара в корзине
     public String getItemName() {
-        return driver.findElement(ITEM_NAME).getText(); // Получим название первого товара в корзине
+        return driver.findElement(ITEM_NAME).getText();
+    }
+
+    // Получает цену товара в корзине
+    // и возвращает текст цены первого товара в корзине
+    public String getItemPrice() {
+        return driver.findElement(ITEM_PRICE).getText();
     }
 }

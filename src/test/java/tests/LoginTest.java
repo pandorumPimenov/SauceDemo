@@ -1,42 +1,72 @@
 package tests;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 public class LoginTest extends  BaseTest {
 
-    @Test
-    public void checkLoginWithoutPassword() {
+    // DataProvider для теста с пустым паролем
+    @DataProvider(name = "EmptyPasswordData")
+    public Object[][] emptyPasswordData() {
+        return new Object[][] {
+                {"standard_user", "", "Epic sadface: Password is required"}
+        };
+    }
+
+    // DataProvider для теста с пустым логином
+    @DataProvider(name = "EmptyUsernameData")
+    public Object[][] emptyUsernameData() {
+        return new Object[][] {
+                {"", "secret_sauce", "Epic sadface: Username is required"}
+        };
+    }
+
+    // DataProvider для теста с неверными кредами
+    @DataProvider(name = "InvalidCredentialsData")
+    public Object[][] invalidCredentialsData() {
+        return new Object[][] {
+                {"test", "test", "Epic sadface: Username and password do not match any user in this service"}
+        };
+    }
+
+    @Test (dataProvider = "EmptyPasswordData",priority = 2,
+            description = "Проверка входа в систему без пароля",
+            testName = "Негативный тест ввода логина без пароля")
+    public void checkLoginWithoutPassword(String user, String password,String expectedMessage) {
         loginPage.open();
-        loginPage.login("standard_user","");
-        assertEquals(loginPage.getErrorMessage(),
-                "Epic sadface: Password is required",
+        loginPage.login(user,password);
+        assertEquals(loginPage.getErrorMessage(), expectedMessage,
                 "Сообщение не соответствует");
     }
 
-    @Test
-    public void checkLoginWithoutUsername() {
+    @Test (dataProvider = "EmptyUsernameData",priority = 3,
+            description = "Проверка входа в систему без логина",
+            testName = "Негативный тест ввода пароля без логина")
+    public void checkLoginWithoutUsername(String user, String password,String expectedMessage) {
         loginPage.open();
-        loginPage.login("","secret_sauce");
-        assertEquals(loginPage.getErrorMessage(),
-                "Epic sadface: Username is required",
+        loginPage.login(user,password);
+        assertEquals(loginPage.getErrorMessage(), expectedMessage,
                 "Сообщение не соответствует");
     }
 
-    @Test
-    public void checkLoginWithNegativeValue() {
+    @Test (dataProvider = "InvalidCredentialsData",priority = 4,
+            description = "Проверка входа в систему с неверном логином и паролем",
+            testName = "Негативный тест ввода неверного логина и пароля")
+    public void checkLoginWithNegativeValue(String user, String password,String expectedMessage) {
         loginPage.open();
-        loginPage.login("test","test");
-        assertEquals(loginPage.getErrorMessage(),
-                "Epic sadface: Username and password do not match any user in this service",
+        loginPage.login(user,password);
+        assertEquals(loginPage.getErrorMessage(), expectedMessage,
                 "Сообщение не соответствует");
     }
 
-    @Test
+    @Test (priority = 1, description = "Проверка входа в систему с валидными кредами",
+            testName = "Позитивный тест ввода валидного логина и пароля")
     public void checkLogin() {
         loginPage.open();
-        loginPage.login("standard_user","secret_sauce");
-       assertTrue(productsPage.isPageOpened());
+        loginPage.login("standard_user", "secret_sauce");
+       assertTrue(productsPage.isPageOpened(),
+               "После успешного входа должна открываться страница продуктов");
     }
 }
