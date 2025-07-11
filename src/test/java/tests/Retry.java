@@ -10,7 +10,7 @@ public class Retry implements IRetryAnalyzer {
      Позволяет перезапускать упавшие тесты заданное количество раз.
      */
     private int attempt = 1; // Текущее количество попыток выполнения теста
-    private static final int MAX_RETRY = 3; // Максимальное количество попыток перезапуска
+    private static final int MAX_RETRY = 1; // Максимальное количество попыток перезапуска
 
     @Override
     public boolean retry(ITestResult iTestResult) {
