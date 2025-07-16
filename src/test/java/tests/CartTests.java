@@ -1,5 +1,6 @@
 package tests;
 
+import io.qameta.allure.*;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -23,6 +24,7 @@ public class CartTests extends BaseTest {
      */
     @Test(description = "Проверка, что корзина пуста после входа в систему",
             testName = "Тест пустой корзины",priority = 1)
+    @Description("Проверка состояния корзины после авторизации - корзина должна быть пустой")
     public void testEmptyCart() {
         // Переход на страницу корзины
         cartPage.open();
@@ -41,6 +43,8 @@ public class CartTests extends BaseTest {
      */
     @Test(description = "Проверка добавления товара в корзину",
             testName = "Тест добавления товара в корзину",priority = 2)
+    @Description("Проверка корректности добавления товара в корзину: " +
+            "товар должен отображаться с правильным названием")
     public void testAddItemToCart() {
         // Добавление товара в корзину
         productsPage.addToCart("Sauce Labs Backpack");
@@ -65,6 +69,8 @@ public class CartTests extends BaseTest {
      */
     @Test(description = "Проверка удаления товара из корзины",
             testName = "Тест удаления товара из корзины",priority = 3)
+    @Description("Проверка функционала удаления товара из корзины - " +
+            "после удаления корзина должна быть пустой")
     public void testRemoveItemFromCart() {
         // Добавление товара в корзину
         productsPage.addToCart("Sauce Labs Bike Light");
@@ -88,6 +94,8 @@ public class CartTests extends BaseTest {
      */
     @Test(description = "Проверка работы кнопки 'Continue Shopping'",
             testName = "Тест кнопки 'Continue Shopping'",priority = 4)
+    @Description("Проверка функционала кнопки продолжения покупок - " +
+            "должен осуществляться возврат на страницу продуктов")
     public void testContinueShopping() {
         // Проверка работы кнопки продолжения покупок
         cartPage.open();
@@ -109,6 +117,7 @@ public class CartTests extends BaseTest {
      */
     @Test(description = "Проверка перехода к оформлению заказа",
             testName = "Тест перехода к оформлению заказа",priority = 5)
+    @Description("Проверка перехода на страницу оформления заказа при нажатии кнопки Checkout")
     public void testCheckoutNavigation() {
         // Добавление товара в
         productsPage.addToCart("Sauce Labs Bolt T-Shirt");

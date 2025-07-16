@@ -1,11 +1,14 @@
 package tests;
 
+import io.qameta.allure.Description;
 import org.testng.annotations.Test;
 
 public class SauceDemoTest extends BaseTest{
 
     @Test(description = "Проверка корректности добавления товара в корзину",
             testName = "Тест добавления товара в корзину")
+    @Description("Проверка что выбранный товар правильно добавляется в корзину - " +
+            "сохраняется название и цена, товар отображается в корзине")
     public void testAddToCartAndVerify() {
         // Логинимся стандартным пользователем (метод из BaseTest)
         loginStandardUser();
