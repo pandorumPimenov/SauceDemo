@@ -16,22 +16,20 @@ public class AllureFailedTest extends BaseTest {
     @TmsLink("ITM-4")
     @Issue("ITM-4-1")
     public void demoFailedTest() {
-        // Шаг 1: Логин стандартного пользователя
+        // 1. Авторизация (использует метод из BaseTest)
         loginStandardUser();
 
-        // Шаг 2: Проверка, что страница продуктов открыта
-        Assert.assertTrue(productsPage.isPageOpened(),
-                "Страница продуктов не открылась после логина");
-
-        // Шаг 3: Добавляем товар в корзину
+        // 2. Добавление конкретного товара в корзину
         productsPage.addToCart("Sauce Labs Backpack");
 
-        // Шаг 4: Переходим в корзину
-        cartPage.open();
+        // 3. Получение названия товара из корзины
+        String itemName = cartPage
+                .open() // Открываем страницу корзины
+                .getItemName(); // Получаем название первого товара
 
-        // Шаг 5: Проверяем товар в корзине (намеренная ошибка)
-        Assert.assertEquals(cartPage.getItemName(),
-                "BLA BLA BLA", // Намеренно неправильное ожидаемое значение
-                "Название товара в корзине не совпадает");
+        // 4. Намеренно некорректная проверка
+        Assert.assertEquals(itemName,
+                "BLA BLA BLA",
+                "Намеренная ошибка");
     }
 }

@@ -10,31 +10,22 @@ public class SauceDemoTest extends BaseTest{
     @Description("Проверка что выбранный товар правильно добавляется в корзину - " +
             "сохраняется название и цена, товар отображается в корзине")
     public void testAddToCartAndVerify() {
-        // Логинимся стандартным пользователем (метод из BaseTest)
-        loginStandardUser();
+        // 1. Авторизация и получение данных о товаре
+        String productName = loginStandardUser() // Авторизуемся
+                .getFirstProductName(); // Получаем название первого товара
 
-        // Проверяем что страница продуктов открыта
-        softAssert.assertTrue(productsPage.isPageOpened(), "Страница с продуктами, открыта");
+        String productPrice = productsPage // Получаем цену товара
+                .addFirstProductToCart() // Добавляем первый товар в корзину
+                .getFirstProductPrice(); // Получаем цену товара
 
-        // Получаем название и цену первого товара на странице продуктов
-        String expectedItemName = productsPage.getFirstProductName();
-        String expectedItemPrice = productsPage.getFirstProductPrice();
+        // 2. Переход в корзину
+        cartPage
+                .open() // Открываем страницу корзины
+                .isPageOpened(); // Проверяем что страница открылась
 
-        // Добавляем первый товар в корзину
-        productsPage.addFirstProductToCart();
-
-        // Переходим в корзину
-        productsPage.goToCart();
-
-        // Проверяем что товар добавлен в корзину
-        softAssert.assertTrue(cartPage.isItemPresent(), "Cart is empty");
-
-        // Проверяем название и цену товара в корзине
-        softAssert.assertEquals(cartPage.getItemName(), expectedItemName,
-                "Название товара не совпадает");
-        softAssert.assertEquals(cartPage.getItemPrice(), expectedItemPrice,
-                "Цена товара не совпадает");
-
-        softAssert.assertAll(); // Завершаем проверки
+        softAssert.assertTrue(cartPage.isItemPresent(), "Корзина пуста");
+        softAssert.assertEquals(cartPage.getItemName(), productName, "Название не совпадает");
+        softAssert.assertEquals(cartPage.getItemPrice(), productPrice, "Цена не совпадает");
+        softAssert.assertAll();
     }
 }

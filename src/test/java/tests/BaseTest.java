@@ -20,11 +20,11 @@ import static tests.AllureUtils.takeScreenshot;
 @Listeners(TestListener.class) // Класс, который будет выводить информацию
 // о тестах в консоли (STARTING TEST, FINISHED TEST и Duration)
 public class BaseTest {
-    WebDriver driver;
-    SoftAssert softAssert;
-    LoginPage loginPage;
-    ProductsPage productsPage;
-    CartPage cartPage;
+    protected WebDriver driver;
+    protected SoftAssert softAssert;
+    protected LoginPage loginPage;
+    protected ProductsPage productsPage;
+    protected CartPage cartPage;
 
     @Parameters({"browser"})
     @BeforeMethod(alwaysRun = true, description = "Настройка драйвера")
@@ -45,18 +45,21 @@ public class BaseTest {
         }
 
         softAssert = new SoftAssert();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20)); // Настройка неявных ожиданий
+        iTestContext.setAttribute("driver", driver); // Передаем driver в контекст теста для listener
 
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
-        iTestContext.setAttribute("driver", driver);
-
+        // Инициализация PageObjects
         loginPage = new LoginPage(driver);
         productsPage = new ProductsPage(driver);
         cartPage = new CartPage(driver);
     }
 
-    protected void loginStandardUser() {
-        loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
+    // Метод для авторизации стандартного пользователя
+    protected ProductsPage loginStandardUser() {
+        return loginPage
+                .open() // Открываем страницу логина
+                .isPageOpened() // Проверяем загрузку
+                .login("standard_user", "secret_sauce");
     }
 
     @AfterMethod(alwaysRun = true, description = "Закрытие браузера")
@@ -67,5 +70,3 @@ public class BaseTest {
         driver.quit();
     }
 }
-
-

@@ -4,6 +4,7 @@ import io.qameta.allure.*;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import pages.ProductsPage;
 
 // Тестовый класс для проверки функциональности корзины покупок:
 public class CartTests extends BaseTest {
@@ -17,20 +18,21 @@ public class CartTests extends BaseTest {
     /*
     Тест проверки пустой корзины (пользователь ничего ранее в корзину не добавлял):
     Шаги:
-    1. Открываем страницу логина
-    2. Выполняем успешный логин
-    3. Открываем корзину
-    4. Проверяем, что корзина пуста
+    1. Авторизация
+    2. Открытие корзины
+    3. Проверка отсутствия товаров
      */
     @Test(description = "Проверка, что корзина пуста после входа в систему",
             testName = "Тест пустой корзины",priority = 1)
     @Description("Проверка состояния корзины после авторизации - корзина должна быть пустой")
     public void testEmptyCart() {
-        // Переход на страницу корзины
-        cartPage.open();
+        boolean isCartEmpty = cartPage
+                .open() // Переход на страницу корзины
+                .isPageOpened()
+                .isItemPresent();
 
         // Проверка, что корзина пуста
-        Assert.assertFalse(cartPage.isItemPresent(), "Корзина должна быть пустой после входа");
+        Assert.assertFalse(isCartEmpty, "Корзина должна быть пустой после входа");
     }
 
     /*
@@ -47,15 +49,18 @@ public class CartTests extends BaseTest {
             "товар должен отображаться с правильным названием")
     public void testAddItemToCart() {
         // Добавление товара в корзину
-        productsPage.addToCart("Sauce Labs Backpack");
+        String productName = "Sauce Labs Backpack";
 
-        // Переход и проверки в корзине
-        cartPage.open();
+        productsPage
+                .addToCart(productName); // Добавляем товар
 
-        // Проверки:
+        String cartItemName = cartPage
+                .open()
+                .isPageOpened()
+                .getItemName(); // Получаем название товара в корзине
+
         Assert.assertTrue(cartPage.isItemPresent(), "Товар должен быть в корзине");
-        Assert.assertEquals(cartPage.getItemName(), "Sauce Labs Backpack",
-                "Название товара не совпадает");
+        Assert.assertEquals(cartItemName, productName, "Название товара не совпадает");
     }
 
     /*
@@ -72,16 +77,17 @@ public class CartTests extends BaseTest {
     @Description("Проверка функционала удаления товара из корзины - " +
             "после удаления корзина должна быть пустой")
     public void testRemoveItemFromCart() {
-        // Добавление товара в корзину
-        productsPage.addToCart("Sauce Labs Bike Light");
+        String productName = "Sauce Labs Bike Light";
 
-        // Удаление товара из корзины
-        cartPage.open();
-        cartPage.removeItem();
+        productsPage
+                .addToCart(productName); // Добавляем товар
+        boolean isCartEmptyAfterRemoval = cartPage
+                .open()
+                .isPageOpened()
+                .removeItem() // Удаляем товар
+                .isItemPresent(); // Проверяем корзину
 
-        // Проверка, что корзина пуста после удаления
-        Assert.assertFalse(cartPage.isItemPresent(),
-                "Корзина должна быть пустой после удаления товара");
+        Assert.assertFalse(isCartEmptyAfterRemoval, "Корзина должна быть пустой после удаления товара");
     }
 
     /*
@@ -97,13 +103,15 @@ public class CartTests extends BaseTest {
     @Description("Проверка функционала кнопки продолжения покупок - " +
             "должен осуществляться возврат на страницу продуктов")
     public void testContinueShopping() {
-        // Проверка работы кнопки продолжения покупок
-        cartPage.open();
-        cartPage.continueShopping();
+        // Переходим в корзину и нажимаем "Continue Shopping"
+        ProductsPage productsPage = cartPage
+                .open()
+                .isPageOpened()
+                .continueShopping(); // Нажимаем кнопку продолжения
 
-        // Проверка, что вернулись на страницу продуктов
-        Assert.assertTrue(productsPage.isPageOpened(),
-                "Должны вернуться на страницу продуктов после нажатия Continue Shopping");
+        // Проверяем что вернулись на страницу продуктов
+        Assert.assertTrue(productsPage.isPageOpened() != null,
+                "Должны вернуться на страницу продуктов");
     }
 
     /*
@@ -119,15 +127,16 @@ public class CartTests extends BaseTest {
             testName = "Тест перехода к оформлению заказа",priority = 5)
     @Description("Проверка перехода на страницу оформления заказа при нажатии кнопки Checkout")
     public void testCheckoutNavigation() {
-        // Добавление товара в
-        productsPage.addToCart("Sauce Labs Bolt T-Shirt");
+        productsPage
+                .addToCart("Sauce Labs Bolt T-Shirt");
 
-        // Переход к оформлению заказа
-        cartPage.open();
-        cartPage.checkout();
+        String checkoutUrl = cartPage
+                .open()
+                .isPageOpened()
+                .checkout()
+                .getCurrentUrl();
 
-        // Проверка URL страницы оформления заказа
-        Assert.assertTrue(driver.getCurrentUrl().contains("checkout-step-one.html"),
-                "Должны перейти на страницу оформления заказа после нажатия Checkout");
+        Assert.assertTrue(checkoutUrl.contains("checkout-step-one.html"),
+                "Должны перейти на страницу оформления заказа");
     }
 }

@@ -44,42 +44,54 @@ public class LoginTest extends  BaseTest {
     @TmsLink("ITM-4")
     @Issue("ITM-4-1")
     @Description("Проверка что пользователь не может войти в магазин, когда вводит пустой пароль")
-    public void checkLoginWithoutPassword(String user, String password,String expectedMessage) {
-        loginPage.open();
-        loginPage.login(user,password);
-        assertEquals(loginPage.getErrorMessage(), expectedMessage,
-                "Сообщение не соответствует");
+    public void checkLoginWithoutPassword(String user, String password, String expectedMessage) {
+        String actualMessage = loginPage
+                .open() // Открыть страницу
+                .isPageOpened() // Проверить её загрузку
+                .attemptLogin(user, password) // Попытка входа (ожидается ошибка)
+                .getErrorMessage(); // Получить текст ошибки
+
+        assertEquals(actualMessage, expectedMessage,
+                "Сообщение об ошибке не соответствует");
     }
 
     @Test (dataProvider = "EmptyUsernameData",priority = 3,
             description = "Проверка входа в систему без логина",
             testName = "Негативный тест ввода пароля без логина")
     @Description("Проверка, что вход невозможен без логина, отображается нужное сообщение")
-    public void checkLoginWithoutUsername(String user, String password,String expectedMessage) {
-        loginPage.open();
-        loginPage.login(user,password);
-        assertEquals(loginPage.getErrorMessage(), expectedMessage,
-                "Сообщение не соответствует");
+    public void checkLoginWithoutUsername(String user, String password, String expectedMessage) {
+        String actualMessage = loginPage
+                .open()
+                .isPageOpened()
+                .attemptLogin(user, password)
+                .getErrorMessage();
+
+        assertEquals(actualMessage, expectedMessage, "Сообщение об ошибке не соответствует");
     }
 
     @Test (dataProvider = "InvalidCredentialsData",priority = 4,
             description = "Проверка входа в систему с неверном логином и паролем",
             testName = "Негативный тест ввода неверного логина и пароля")
     @Description("Проверка ошибки при вводе неправильного логина и пароля")
-    public void checkLoginWithNegativeValue(String user, String password,String expectedMessage) {
-        loginPage.open();
-        loginPage.login(user,password);
-        assertEquals(loginPage.getErrorMessage(), expectedMessage,
-                "Сообщение не соответствует");
+    public void checkLoginWithNegativeValue(String user, String password, String expectedMessage) {
+        String actualMessage = loginPage
+                .open()
+                .isPageOpened()
+                .attemptLogin(user, password)
+                .getErrorMessage();
+
+        assertEquals(actualMessage, expectedMessage, "Сообщение об ошибке не соответствует");
     }
 
     @Test (priority = 1, description = "Проверка входа в систему с валидными кредами",
             testName = "Позитивный тест ввода валидного логина и пароля")
     @Description("Проверка успешного входа с правильными логином и паролем")
     public void checkLogin() {
-        loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
-       assertTrue(productsPage.isPageOpened(),
-               "После успешного входа должна открываться страница продуктов");
+        boolean isOpened = loginPage
+                .open()
+                .login("standard_user", "secret_sauce")
+                .isTitleDisplayed();
+
+        assertTrue(isOpened, "Страница продуктов не загрузилась");
     }
 }

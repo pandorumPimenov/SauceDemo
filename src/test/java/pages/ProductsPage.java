@@ -29,19 +29,29 @@ public class ProductsPage extends BasePage{
     public ProductsPage(WebDriver driver) {
         super(driver);
     }
- 
+
     // Открывает страницу с продуктами
+    @Override
     @Step("Открыть страницу с продуктами")
-    public void open() {
+    public ProductsPage open() {
         driver.get(BASE_URL + "inventory.html");
+        return this;
     }
 
     // Проверяет, что страница продуктов открыта и
     // возвращает true если заголовок страницы отображается
+    @Override
     @Step("Проверить, что страница продуктов открыта")
-    public boolean isPageOpened() {
+    public ProductsPage isPageOpened() {
+        driver.findElement(TITLE).isDisplayed();
+        return this;
+    }
+
+    @Step("Проверить видимость заголовка страницы продуктов")
+    public boolean isTitleDisplayed() {
         return driver.findElement(TITLE).isDisplayed();
     }
+
     // Получает название первого товара в списке и
     // возвращает текст названия товара
     @Step("Получить название первого товара в списке")
@@ -58,21 +68,23 @@ public class ProductsPage extends BasePage{
 
     // Добавляет первый товар из списка в корзину
     @Step("Добавить первый товар из списка в корзину")
-    public void addFirstProductToCart() {
+    public ProductsPage addFirstProductToCart() {
         driver.findElement(ADD_TO_CART_BUTTON).click();
+        return this;
     }
 
     // Переходит в корзину
     @Step("Перейти в корзину")
-    public void goToCart() {
+    public CartPage goToCart() {
         driver.findElement(SHOPPING_CART_LINK).click();
+        return new CartPage(driver).isPageOpened();
     }
- 
-     // Метод добавляет товар в корзину по его названию
-     @Step("Добавить товар {productName} в корзину")
-    public void addToCart(String productName) {
+
+    // Метод добавляет товар в корзину по его названию
+    @Step("Добавить товар {productName} в корзину")
+    public ProductsPage addToCart(String productName) {
         String xpath = String.format(ADD_TO_CART_PATTERN, productName);
-     // Находим элемент кнопки "Add to cart" по XPath и кликаем по ней
         driver.findElement(By.xpath(xpath)).click();
+        return this;
     }
 }
