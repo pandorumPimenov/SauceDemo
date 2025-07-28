@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 @Log4j2
 public class AllureFailedTest extends BaseTest {
 
-    @Test(description = "Проверка соответствия названия товара в корзине (намеренное падение)")
+    @Test(description = "Проверка соответствия названия товара в корзине (намеренное падение)",enabled = false)
     @Story("Проверка добавления товара в корзину")
     @Severity(SeverityLevel.NORMAL)
     @Owner("Pimenov S.I")

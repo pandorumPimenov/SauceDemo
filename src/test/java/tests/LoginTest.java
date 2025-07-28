@@ -17,7 +17,7 @@ public class LoginTest extends BaseTest {
     public Object[][] emptyPasswordData() {
         log.info("Подготовка данных для теста с пустым паролем");
         return new Object[][] {
-                {"standard_user", "", "Epic sadface: Password is required"}
+                {user, "", "Epic sadface: Password is required"}
         };
     }
 
@@ -26,7 +26,7 @@ public class LoginTest extends BaseTest {
     public Object[][] emptyUsernameData() {
         log.info("Подготовка данных для теста с пустым логином");
         return new Object[][] {
-                {"", "secret_sauce", "Epic sadface: Username is required"}
+                {"", password, "Epic sadface: Username is required"}
         };
     }
 
@@ -104,7 +104,6 @@ public class LoginTest extends BaseTest {
         assertEquals(actualMessage, expectedMessage,
                 "Неверное сообщение об ошибке при пустом логине");
     }
-
     @Test(dataProvider = "InvalidCredentialsData",
             priority = 4,
             description = "Проверка входа с неверными кредами",

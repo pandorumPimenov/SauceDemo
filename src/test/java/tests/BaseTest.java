@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
@@ -31,6 +32,9 @@ public class BaseTest {
     protected CartPage cartPage;
     protected CheckoutOverviewPage checkoutOverviewPage;
 
+    String user = System.getProperty("user");
+    String password = System.getProperty("password");
+
     @Parameters({"browser"})
     @BeforeMethod(alwaysRun = true, description = "Настройка драйвера")
     public void setup(@Optional("chrome") String browser,ITestContext iTestContext) {
@@ -46,11 +50,13 @@ public class BaseTest {
             options.addArguments("--disable-notifications");
             options.addArguments("--disable-popup-blocking");
             options.addArguments("--disable-infobars");
+            options.addArguments("--headless");
             driver = new ChromeDriver(options);
             log.info("ChromeDriver успешно инициализирован");
         } else if (browser.equalsIgnoreCase("firefox")) {
-            log.info("Инициализация FirefoxDriver");
-            driver = new FirefoxDriver();
+            FirefoxOptions options = new FirefoxOptions();
+            options.addArguments("--headless");
+            driver = new FirefoxDriver(options);
         }
 
         softAssert = new SoftAssert();
