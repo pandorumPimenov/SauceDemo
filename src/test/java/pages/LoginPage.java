@@ -48,7 +48,7 @@ public class LoginPage extends BasePage {
     // Выполняет вход в систему с указанными учетными данными
     @Step("Вход в систему с именем пользователя: {user} и паролем: {password}")
     public ProductsPage login(String user, String password) {
-        log.info("Попытка авторизации пользователя: {}", user);
+        log.info("Попытка авторизации пользователя: {},{}", user,password);
         isPageOpened();
         driver.findElement(LOGIN_FIELD).sendKeys(user);
         driver.findElement(PASSWORD_FIELD).sendKeys(password);
