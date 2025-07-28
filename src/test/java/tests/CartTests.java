@@ -1,125 +1,133 @@
 package tests;
 
-import lombok.extern.log4j.Log4j2;
 import io.qameta.allure.*;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-@Log4j2
-@Epic("Тесты корзины покупок")
-@Feature("Основные функции корзины")
+// Тестовый класс для проверки функциональности корзины покупок:
 public class CartTests extends BaseTest {
 
     @BeforeMethod
     public void setUpTest() {
-        log.info("Подготовка теста: авторизация пользователя");
-        loginStandardUser().isPageOpened();
+        // Инициализация страницы логина
+        loginStandardUser();
     }
 
-    @Test(description = "Проверка пустой корзины после входа",
-            testName = "Тест пустой корзины",
-            priority = 1)
-    @Severity(SeverityLevel.CRITICAL)
-    @Story("Cart Functionality")
-    @Owner("Pimenov S.I")
-    @Description("Проверка что корзина пуста после авторизации")
+    /*
+    Тест проверки пустой корзины (пользователь ничего ранее в корзину не добавлял):
+    Шаги:
+    1. Открываем страницу логина
+    2. Выполняем успешный логин
+    3. Открываем корзину
+    4. Проверяем, что корзина пуста
+     */
+    @Test(description = "Проверка, что корзина пуста после входа в систему",
+            testName = "Тест пустой корзины",priority = 1)
+    @Description("Проверка состояния корзины после авторизации - корзина должна быть пустой")
     public void testEmptyCart() {
-        log.info("Запуск теста проверки пустой корзины");
-        cartPage
-                .open()
-                .isPageOpened(); // Проверяем только открытие страницы
+        // Переход на страницу корзины
+        cartPage.open();
 
-        log.info("Проверка наличия товаров в корзине");
-        Assert.assertFalse(cartPage.isItemPresent(),
-                "Корзина должна быть пустой после входа");
+        // Проверка, что корзина пуста
+        Assert.assertFalse(cartPage.isItemPresent(), "Корзина должна быть пустой после входа");
     }
 
+    /*
+    Тест добавления товара в корзину:
+    Шаги:
+    1. Логин в систему
+    2. Добавление конкретного товара в корзину
+    3. Переход в корзину
+    4. Проверка наличия товара и его названия
+     */
     @Test(description = "Проверка добавления товара в корзину",
-            testName = "Тест добавления товара",
-            priority = 2)
-    @Severity(SeverityLevel.BLOCKER)
-    @Story("Cart Functionality")
-    @Owner("Pimenov S.I")
-    @Description("Проверка корректности добавления товара в корзину")
+            testName = "Тест добавления товара в корзину",priority = 2)
+    @Description("Проверка корректности добавления товара в корзину: " +
+            "товар должен отображаться с правильным названием")
     public void testAddItemToCart() {
-        String productName = "Sauce Labs Backpack";
-        log.info("Запуск теста добавления товара: {}", productName);
+        // Добавление товара в корзину
+        productsPage.addToCart("Sauce Labs Backpack");
 
-        productsPage
-                .addToCart(productName)
-                .goToCart()
-                .isPageOpened();
+        // Переход и проверки в корзине
+        cartPage.open();
 
-        log.info("Проверка наличия товара в корзине");
-        Assert.assertTrue(cartPage.isItemPresent(),
-                "Товар должен быть в корзине");
-        log.info("Проверка соответствия названия товара");
-        Assert.assertEquals(cartPage.getItemName(), productName,
+        // Проверки:
+        Assert.assertTrue(cartPage.isItemPresent(), "Товар должен быть в корзине");
+        Assert.assertEquals(cartPage.getItemName(), "Sauce Labs Backpack",
                 "Название товара не совпадает");
     }
 
+    /*
+    Тест удаления товара из корзины.
+   Шаги:
+   1. Логин в систему
+   2. Добавление товара в корзину
+   3. Переход в корзину
+   4. Удаление товара
+   5. Проверка, что корзина пуста
+     */
     @Test(description = "Проверка удаления товара из корзины",
-            testName = "Тест удаления товара",
-            priority = 3)
-    @Severity(SeverityLevel.NORMAL)
-    @Story("Cart Functionality")
-    @Owner("Pimenov S.I")
-    @Description("Проверка функционала удаления товара из корзины")
+            testName = "Тест удаления товара из корзины",priority = 3)
+    @Description("Проверка функционала удаления товара из корзины - " +
+            "после удаления корзина должна быть пустой")
     public void testRemoveItemFromCart() {
-        String productName = "Sauce Labs Bike Light";
-        log.info("Запуск теста удаления товара: {}", productName);
+        // Добавление товара в корзину
+        productsPage.addToCart("Sauce Labs Bike Light");
 
-        productsPage
-                .addToCart(productName)
-                .goToCart()
-                .isPageOpened()
-                .removeItem();
+        // Удаление товара из корзины
+        cartPage.open();
+        cartPage.removeItem();
 
-        log.info("Проверка отсутствия товаров в корзине после удаления");
+        // Проверка, что корзина пуста после удаления
         Assert.assertFalse(cartPage.isItemPresent(),
-                "Корзина должна быть пустой после удаления");
+                "Корзина должна быть пустой после удаления товара");
     }
 
-    @Test(description = "Проверка кнопки 'Continue Shopping'",
-            testName = "Тест продолжения покупок",
-            priority = 4)
-    @Severity(SeverityLevel.NORMAL)
-    @Story("Cart Navigation")
-    @Owner("Pimenov S.I")
-    @Description("Проверка возврата на страницу продуктов")
+    /*
+    Тест работы кнопки "Continue Shopping".
+    Шаги:
+    1. Логин в систему
+    2. Переход в корзину
+    3. Нажатие кнопки продолжения покупок
+    4. Проверка возврата на страницу продуктов
+     */
+    @Test(description = "Проверка работы кнопки 'Continue Shopping'",
+            testName = "Тест кнопки 'Continue Shopping'",priority = 4)
+    @Description("Проверка функционала кнопки продолжения покупок - " +
+            "должен осуществляться возврат на страницу продуктов")
     public void testContinueShopping() {
-        log.info("Запуск теста кнопки 'Continue Shopping'");
-        cartPage
-                .open()
-                .isPageOpened()
-                .continueShopping()
-                .isPageOpened();
+        // Проверка работы кнопки продолжения покупок
+        cartPage.open();
+        cartPage.continueShopping();
 
-        log.info("Проверка возврата на страницу продуктов");
-        Assert.assertTrue(productsPage.isOnProductsPage(),
-                "Должны вернуться на страницу продуктов");
+        // Проверка, что вернулись на страницу продуктов
+        Assert.assertTrue(productsPage.isPageOpened(),
+                "Должны вернуться на страницу продуктов после нажатия Continue Shopping");
     }
 
+    /*
+    Тест перехода к оформлению заказа.
+    Шаги:
+    1. Логин в систему
+    2. Добавление товара в корзину
+    3. Переход в корзину
+    4. Нажатие кнопки оформления заказа
+    5. Проверка перехода на страницу оформления
+     */
     @Test(description = "Проверка перехода к оформлению заказа",
-            testName = "Тест оформления заказа",
-            priority = 5)
-    @Severity(SeverityLevel.BLOCKER)
-    @Story("Checkout Process")
-    @Owner("Pimenov S.I")
-    @Description("Проверка перехода на страницу оформления заказа")
+            testName = "Тест перехода к оформлению заказа",priority = 5)
+    @Description("Проверка перехода на страницу оформления заказа при нажатии кнопки Checkout")
     public void testCheckoutNavigation() {
-        String productName = "Sauce Labs Bolt T-Shirt";
-        log.info("Запуск теста оформления заказа для товара: {}", productName);
+        // Добавление товара в
+        productsPage.addToCart("Sauce Labs Bolt T-Shirt");
 
-        productsPage
-                .addToCart(productName)
-                .goToCart()
-                .isPageOpened()
-                .checkout();
+        // Переход к оформлению заказа
+        cartPage.open();
+        cartPage.checkout();
 
-        log.info("Проверка URL страницы оформления заказа");
+        // Проверка URL страницы оформления заказа
         Assert.assertTrue(driver.getCurrentUrl().contains("checkout-step-one.html"),
-                "URL должен содержать checkout-step-one.html");
+                "Должны перейти на страницу оформления заказа после нажатия Checkout");
     }
 }

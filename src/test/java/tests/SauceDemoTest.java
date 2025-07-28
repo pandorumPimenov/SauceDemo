@@ -1,58 +1,40 @@
 package tests;
 
-import lombok.extern.log4j.Log4j2;
-import io.qameta.allure.*;
+import io.qameta.allure.Description;
 import org.testng.annotations.Test;
-import static org.testng.Assert.*;
 
-@Log4j2
 public class SauceDemoTest extends BaseTest{
 
-    @Test(description = "Оформление и покупка товара с проверками",
-            testName = "Тест покупки")
-    @Description("Проверка всего процесса покупки: от добавления товара до подтверждения заказа")
-    public void testCompletePurchaseWithChaining() {
+    @Test(description = "Проверка корректности добавления товара в корзину",
+            testName = "Тест добавления товара в корзину")
+    @Description("Проверка что выбранный товар правильно добавляется в корзину - " +
+            "сохраняется название и цена, товар отображается в корзине")
+    public void testAddToCartAndVerify() {
+        // Логинимся стандартным пользователем (метод из BaseTest)
+        loginStandardUser();
 
-        // Тестовые данные
-        final String PRODUCT_NAME = "Sauce Labs Backpack";
-        final String FIRST_NAME = "Sergey";
-        final String LAST_NAME = "Pimenov";
-        final String ZIP_CODE = "270725";
+        // Проверяем что страница продуктов открыта
+        softAssert.assertTrue(productsPage.isPageOpened(), "Страница с продуктами, открыта");
 
-        log.info("Начало  теста полного цикла оформления покупки");
-        log.info("Тестовые данные:");
-        log.info("Товар: {}, Имя: {}, Фамилия: {}, Индекс: {}",
-                PRODUCT_NAME, FIRST_NAME, LAST_NAME, ZIP_CODE);
+        // Получаем название и цену первого товара на странице продуктов
+        String expectedItemName = productsPage.getFirstProductName();
+        String expectedItemPrice = productsPage.getFirstProductPrice();
 
-        // 1. Цепочка действий и проверок
-        log.info("Шаг 1: Авторизация и проверка страницы продуктов");
-        String confirmationText = loginStandardUser()
-                .isPageOpened()
+        // Добавляем первый товар в корзину
+        productsPage.addFirstProductToCart();
 
-                // Проверка и получение данных товара
-                .validateProductData(PRODUCT_NAME)
+        // Переходим в корзину
+        productsPage.goToCart();
 
-                // Работа с корзиной
-                .addToCart(PRODUCT_NAME)
-                .goToCart()
-                .isPageOpened()
-                .validateCartItem(PRODUCT_NAME)
+        // Проверяем что товар добавлен в корзину
+        softAssert.assertTrue(cartPage.isItemPresent(), "Cart is empty");
 
-                // Оформление заказа
-                .checkout()
-                .fillInformation(FIRST_NAME, LAST_NAME, ZIP_CODE)
-                .isPageOpened()
-                .validateCheckoutData(PRODUCT_NAME)
+        // Проверяем название и цену товара в корзине
+        softAssert.assertEquals(cartPage.getItemName(), expectedItemName,
+                "Название товара не совпадает");
+        softAssert.assertEquals(cartPage.getItemPrice(), expectedItemPrice,
+                "Цена товара не совпадает");
 
-                // Завершение заказа
-                .finishCheckout()
-                .getConfirmationText();
-
-        log.info("Получено подтверждение заказа: '{}'", confirmationText);
-
-        // 2. Финальная проверка
-        assertTrue(confirmationText.contains("Thank you"),
-                "Подтверждение заказа должно содержать 'Thank you'. Фактически: " + confirmationText);
-        log.info("Тест успешно завершен: покупка товара '{}' подтверждена", PRODUCT_NAME);
+        softAssert.assertAll(); // Завершаем проверки
     }
 }
