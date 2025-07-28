@@ -1,38 +1,41 @@
 package pages;
 
-import io.qameta.allure.Step;
+import lombok.extern.log4j.Log4j2;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+@Log4j2
+// Класс, представляющий страницу завершения оформления заказа
 public class CheckoutCompletePage extends BasePage {
-
-    private final By COMPLETE_HEADER = By.className("complete-header");
-    private final By BACK_HOME_BUTTON = By.id("back-to-products");
+    // Локатор заголовка подтверждения заказа
+    private static final By COMPLETE_HEADER = By.className("complete-header");
 
     public CheckoutCompletePage(WebDriver driver) {
         super(driver);
+        log.info("Инициализация страницы завершения заказа");
     }
 
+    // Открывает страницу завершения заказа
     @Override
     public CheckoutCompletePage open() {
+        log.info("Открытие страницы завершения заказа по URL: {}", BASE_URL + "checkout-complete.html");
         driver.get(BASE_URL + "checkout-complete.html");
         return this;
     }
 
+    // Проверяет, что страница завершения заказа успешно открыта
+    // Ожидает появления заголовка подтверждения заказа
     @Override
     public CheckoutCompletePage isPageOpened() {
-        driver.findElement(COMPLETE_HEADER).isDisplayed();
-        return this;
+        log.info("Проверка открытия страницы завершения заказа");
+        waitForElementToBeVisible(COMPLETE_HEADER);
+        log.info("Страница завершения заказа успешно открыта");
+        return this; // Возвращает текущий экземпляр CheckoutCompletePage
     }
 
-    @Step("Получить текст сообщения об успешном заказе")
-    public String getCompleteText() {
+    // Получает текст подтверждения успешного оформления заказа
+    public String getConfirmationText() {
+        log.info("Получение текста подтверждения заказа");
         return driver.findElement(COMPLETE_HEADER).getText();
-    }
-
-    @Step("Вернуться на страницу продуктов")
-    public ProductsPage backToProducts() {
-        driver.findElement(BACK_HOME_BUTTON).click();
-        return new ProductsPage(driver).isPageOpened();
     }
 }
