@@ -12,7 +12,7 @@ public class LoginTest extends  BaseTest {
     @DataProvider(name = "EmptyPasswordData")
     public Object[][] emptyPasswordData() {
         return new Object[][] {
-                {"standard_user", "", "Epic sadface: Password is required"}
+                {user, "", "Epic sadface: Password is required"}
         };
     }
 
@@ -20,7 +20,7 @@ public class LoginTest extends  BaseTest {
     @DataProvider(name = "EmptyUsernameData")
     public Object[][] emptyUsernameData() {
         return new Object[][] {
-                {"", "secret_sauce", "Epic sadface: Username is required"}
+                {"", password, "Epic sadface: Username is required"}
         };
     }
 
@@ -78,7 +78,7 @@ public class LoginTest extends  BaseTest {
     @Description("Проверка успешного входа с правильными логином и паролем")
     public void checkLogin() {
         loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
+        loginPage.login(user, password);
        assertTrue(productsPage.isPageOpened(),
                "После успешного входа должна открываться страница продуктов");
     }
