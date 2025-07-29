@@ -42,20 +42,20 @@
 
 ### Step One:  Information User <https://www.saucedemo.com/checkout-step-one.html>
 
-- [ ] Валидация обязательных полей (First Name, Last Name, Zip)
-- [ ] Переход к Step Two
+- [X] Валидация обязательных полей (First Name, Last Name, Zip)
+- [X] Переход к Step Two
 
 ### Step Two: Overview <https://www.saucedemo.com/checkout-step-one.html>
 
-- [ ] Итоговая сумма заказа и налоги
-- [ ] Соответствие товаров и цен
-- [ ] Проверка кнопок:
-    - [ ] Finish
+- [X] Итоговая сумма заказа и налоги
+- [X] Соответствие товаров и цен
+- [X] Проверка кнопок:
+    - [X] Finish
     - [ ] Cancel
 
 ### Step Three: Complete <https://www.saucedemo.com/checkout-complete.html>
 
-- [ ] Сообщение об успешном оформлении заказа
+- [X] Сообщение об успешном оформлении заказа
 - [ ] Кнопка "Back Home" возвращает на главную
 
 ---
