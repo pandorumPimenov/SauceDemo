@@ -53,7 +53,6 @@ public class LoginPage extends BasePage {
         driver.findElement(LOGIN_FIELD).sendKeys(user);
         driver.findElement(PASSWORD_FIELD).sendKeys(password);
         driver.findElement(LOGIN_BUTTON).click();
-        log.info("Авторизация выполнена, переход на страницу продуктов");
         return new ProductsPage(driver); // Возвращает экземпляр ProductsPage (страница после успешного входа)
     }
 

@@ -63,12 +63,9 @@ public class BaseTest {
 
         softAssert = new SoftAssert();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
-        log.info("Установлено неявное ожидание: 20 секунд"); // Настройка неявных ожиданий
         iTestContext.setAttribute("driver", driver); // Передаем driver в контекст теста для listener
-        log.info("Драйвер передан в контекст теста");
 
         // Инициализация PageObjects
-        log.info("Инициализация Page Objects");
         loginPage = new LoginPage(driver);
         productsPage = new ProductsPage(driver);
         cartPage = new CartPage(driver);

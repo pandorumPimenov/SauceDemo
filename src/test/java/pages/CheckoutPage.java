@@ -42,7 +42,6 @@ public class CheckoutPage extends BasePage {
     public CheckoutPage isPageOpened() {
         log.info("Проверка открытия страницы оформления заказа");
         waitForElementToBeVisible(FIRST_NAME_FIELD);
-        log.info("Страница оформления заказа успешно открыта");
         return this; // Возвращает текущий экземпляр CheckoutPage
     }
 

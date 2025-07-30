@@ -18,7 +18,6 @@ public class CheckoutCompletePage extends BasePage {
     // Открывает страницу завершения заказа
     @Override
     public CheckoutCompletePage open() {
-        log.info("Открытие страницы завершения заказа по URL: {}", BASE_URL + "checkout-complete.html");
         driver.get(BASE_URL + "checkout-complete.html");
         return this;
     }
@@ -29,7 +28,6 @@ public class CheckoutCompletePage extends BasePage {
     public CheckoutCompletePage isPageOpened() {
         log.info("Проверка открытия страницы завершения заказа");
         waitForElementToBeVisible(COMPLETE_HEADER);
-        log.info("Страница завершения заказа успешно открыта");
         return this; // Возвращает текущий экземпляр CheckoutCompletePage
     }
 

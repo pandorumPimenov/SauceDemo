@@ -62,7 +62,6 @@ public class CartPage extends BasePage {
     public CartPage isPageOpened() {
         log.info("Проверка видимости заголовка корзины");
         waitForElementToBeVisible(CART_TITLE);
-        log.info("Страница корзины успешно открыта");
         return this; // Возвращает текущий экземпляр CartPage
     }
 

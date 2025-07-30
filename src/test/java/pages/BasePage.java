@@ -19,7 +19,6 @@ public abstract class BasePage {
         log.info("Инициализация базовой страницы с драйвером");
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-        log.info("Установлено время ожидания элементов: 15 секунд");
     }
 
     // Абстрактный метод для открытия страницы.

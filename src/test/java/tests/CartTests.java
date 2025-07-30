@@ -5,6 +5,8 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import static org.testng.Assert.assertEquals;
+
 @Epic("Тесты корзины покупок")
 @Feature("Основные функции корзины")
 public class CartTests extends BaseTest {
@@ -30,9 +32,27 @@ public class CartTests extends BaseTest {
                 "Корзина должна быть пустой после входа");
     }
 
+    @Test(description = "Проверка цены товара в корзине",
+            priority = 2)
+    @Severity(SeverityLevel.BLOCKER)
+    @Story("Cart Functionality")
+    @Owner("Pimenov S.I")
+    public void testItemPriceInCart() {
+        String productName = "Sauce Labs Backpack";
+        String expectedPrice = "$29.99";
+
+        productsPage
+                .addToCart(productName)
+                .goToCart()
+                .isPageOpened();
+
+        String actualPrice = cartPage.getItemPrice();
+        assertEquals(actualPrice, expectedPrice, "Цена товара не совпадает");
+    }
+
     @Test(description = "Проверка добавления товара в корзину",
             testName = "Тест добавления товара",
-            priority = 2)
+            priority = 3)
     @Severity(SeverityLevel.BLOCKER)
     @Story("Cart Functionality")
     @Owner("Pimenov S.I")
@@ -47,13 +67,13 @@ public class CartTests extends BaseTest {
 
         Assert.assertTrue(cartPage.isItemPresent(),
                 "Товар должен быть в корзине");
-        Assert.assertEquals(cartPage.getItemName(), productName,
+        assertEquals(cartPage.getItemName(), productName,
                 "Название товара не совпадает");
     }
 
     @Test(description = "Проверка удаления товара из корзины",
             testName = "Тест удаления товара",
-            priority = 3)
+            priority = 4)
     @Severity(SeverityLevel.NORMAL)
     @Story("Cart Functionality")
     @Owner("Pimenov S.I")
@@ -73,7 +93,7 @@ public class CartTests extends BaseTest {
 
     @Test(description = "Проверка кнопки 'Continue Shopping'",
             testName = "Тест продолжения покупок",
-            priority = 4)
+            priority = 5)
     @Severity(SeverityLevel.NORMAL)
     @Story("Cart Navigation")
     @Owner("Pimenov S.I")
@@ -91,7 +111,7 @@ public class CartTests extends BaseTest {
 
     @Test(description = "Проверка перехода к оформлению заказа",
             testName = "Тест оформления заказа",
-            priority = 5)
+            priority = 6)
     @Severity(SeverityLevel.BLOCKER)
     @Story("Checkout Process")
     @Owner("Pimenov S.I")

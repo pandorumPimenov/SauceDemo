@@ -42,7 +42,6 @@ public class ProductsPage extends BasePage{
     @Override
     @Step("Открыть страницу с продуктами")
     public ProductsPage open() {
-        log.info("Открытие страницы продуктов");
         driver.get(BASE_URL + "inventory.html");
         return this;
     }
@@ -52,7 +51,6 @@ public class ProductsPage extends BasePage{
     @Override
     @Step("Проверить, что страница продуктов открыта")
     public ProductsPage isPageOpened() {
-        log.info("Проверка заголовка страницы продуктов");
         waitForElementToBeVisible(TITLE);
         return this;
     }
