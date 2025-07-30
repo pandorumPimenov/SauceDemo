@@ -3,10 +3,10 @@
 <suite name="SauceDemo Test Suite"> <!-- Основной контейнер для набора тестов -->
     <listeners>
         <!-- TestListener - логирует начало/конец тестов и измеряет время выполнения -->
-        <listener class-name="tests.TestListener"/>
+        <listener class-name="listeners.TestListener"/>
         <!-- AnnotationTransformer - автоматически добавляет RetryAnalyzer
           ко всем тестам для повторного запуска упавших тестов -->
-        <listener class-name="tests.AnnotationTransformer"/>
+        <listener class-name="listeners.AnnotationTransformer"/>
     </listeners>
     <test name="Login Tests"> <!-- Тестовый набор 1-->
         <classes> <!-- Классы, содержащие тесты -->

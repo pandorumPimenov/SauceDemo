@@ -15,11 +15,13 @@ import pages.CartPage;
 import pages.CheckoutOverviewPage;
 import pages.LoginPage;
 import pages.ProductsPage;
+import utils.PropertyReader;
+import listeners.TestListener;
 
 import java.time.Duration;
 import java.util.HashMap;
 
-import static tests.AllureUtils.takeScreenshot;
+import static utils.AllureUtils.takeScreenshot;
 
 @Log4j2
 @Listeners(TestListener.class) // Класс, который будет выводить информацию
@@ -32,7 +34,7 @@ public class BaseTest {
     protected CartPage cartPage;
     protected CheckoutOverviewPage checkoutOverviewPage;
 
-    String user = System.getProperty("user",PropertyReader.getProperty("user"));
+    String user = System.getProperty("user", PropertyReader.getProperty("user"));
     String password = System.getProperty("password",PropertyReader.getProperty("password"));
 
     @Parameters({"browser"})

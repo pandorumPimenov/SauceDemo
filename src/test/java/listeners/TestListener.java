@@ -1,4 +1,4 @@
-package tests;
+package listeners;
 
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
@@ -7,7 +7,7 @@ import org.testng.ITestResult;
 import lombok.extern.log4j.Log4j2;
 import java.util.concurrent.TimeUnit;
 
-import static tests.AllureUtils.takeScreenshot;
+import static utils.AllureUtils.takeScreenshot;
 
 @Log4j2
 public class TestListener implements ITestListener {
