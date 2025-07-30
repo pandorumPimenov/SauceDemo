@@ -1,15 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name ="SauceDemo SmokeTest" thread-count="2" parallel="tests">
-    <test name="Thread#1">
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="SauceDemo - Full Test Suite" verbose="1" configfailurepolicy="continue">
+
+    <!-- 1. Глобальные группы тестов -->
+    <groups>
+        <define name="auth_group">
+            <include name="authentication"/>
+        </define>
+
+        <define name="cart_group">
+            <include name="cart_operations"/>
+        </define>
+
+        <define name="purchase_group">
+            <include name="checkout"/>
+        </define>
+    </groups>
+
+    <!-- 2. Тесты авторизации (должны выполняться первыми) -->
+    <test name="Authentication Tests" preserve-order="true">
+        <groups>
+            <run>
+                <include name="authentication"/>
+            </run>
+        </groups>
         <classes>
-            <class name="tests.LoginTest"/>
+            <class name="tests.LoginTest">
+                <methods>
+                    <include name="testSuccessfulLogin"/>
+                    <include name="testLoginWithoutPassword"/>
+                    <include name="testLoginWithoutUsername"/>
+                    <include name="testLoginWithInvalidCredentials"/>
+                </methods>
+            </class>
         </classes>
-    </test> <!-- Test -->
-    <test name="Thread#2">
+    </test>
+
+    <!-- 3. Тесты корзины (зависит от успешной авторизации) -->
+    <test name="Cart Operations" dependsOnGroups="auth_group">
+        <groups>
+            <run>
+                <include name="cart_operations"/>
+            </run>
+        </groups>
         <classes>
-            <class name="tests.CartTests"/>
-            <class name="tests.LoginTest"/>
+            <class name="tests.CartTests">
+                <methods>
+                    <include name="testEmptyCart"/>
+                    <include name="testAddItemToCart"/>
+                    <include name="testRemoveItemFromCart"/>
+                    <include name="testContinueShopping"/>
+                </methods>
+            </class>
         </classes>
-    </test> <!-- Test -->
+    </test>
+
+    <!-- 4. Полный сценарий покупки (зависит от auth и cart) -->
+    <test name="Complete Purchase Flow" dependsOnGroups="auth_group,cart_group">
+        <groups>
+            <run>
+                <include name="checkout"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="tests.SauceDemoTest"/>
+        </classes>
+    </test>
+
+    <!-- 5. Параметры для Allure -->
+    <listeners>
+        <listener class-name="io.qameta.allure.testng.AllureTestNg"/>
+    </listeners>
 </suite>

@@ -16,7 +16,8 @@ public class CartTests extends BaseTest {
         loginStandardUser().isPageOpened();
     }
 
-    @Test(description = "Проверка пустой корзины после входа",
+    @Test(groups = "cart_operations",
+            description = "Проверка пустой корзины после входа",
             testName = "Тест пустой корзины",
             priority = 1)
     @Severity(SeverityLevel.CRITICAL)
@@ -32,7 +33,8 @@ public class CartTests extends BaseTest {
                 "Корзина должна быть пустой после входа");
     }
 
-    @Test(description = "Проверка цены товара в корзине",
+    @Test(groups = "cart_operations",
+            description = "Проверка цены товара в корзине",
             priority = 2)
     @Severity(SeverityLevel.BLOCKER)
     @Story("Cart Functionality")
@@ -50,7 +52,8 @@ public class CartTests extends BaseTest {
         assertEquals(actualPrice, expectedPrice, "Цена товара не совпадает");
     }
 
-    @Test(description = "Проверка добавления товара в корзину",
+    @Test(groups = "cart_operations",
+            description = "Проверка добавления товара в корзину",
             testName = "Тест добавления товара",
             priority = 3)
     @Severity(SeverityLevel.BLOCKER)
@@ -71,7 +74,8 @@ public class CartTests extends BaseTest {
                 "Название товара не совпадает");
     }
 
-    @Test(description = "Проверка удаления товара из корзины",
+    @Test(groups = "cart_operations",
+            description = "Проверка удаления товара из корзины",
             testName = "Тест удаления товара",
             priority = 4)
     @Severity(SeverityLevel.NORMAL)
@@ -91,7 +95,8 @@ public class CartTests extends BaseTest {
                 "Корзина должна быть пустой после удаления");
     }
 
-    @Test(description = "Проверка кнопки 'Continue Shopping'",
+    @Test(groups = "cart_operations",
+            description = "Проверка кнопки 'Continue Shopping'",
             testName = "Тест продолжения покупок",
             priority = 5)
     @Severity(SeverityLevel.NORMAL)
@@ -109,7 +114,8 @@ public class CartTests extends BaseTest {
                 "Должны вернуться на страницу продуктов");
     }
 
-    @Test(description = "Проверка перехода к оформлению заказа",
+    @Test(groups = "cart_operations",
+            description = "Проверка перехода к оформлению заказа",
             testName = "Тест оформления заказа",
             priority = 6)
     @Severity(SeverityLevel.BLOCKER)

@@ -6,7 +6,8 @@ import static org.testng.Assert.*;
 
 public class SauceDemoTest extends BaseTest{
 
-    @Test(description = "Оформление и покупка товара с проверками",
+    @Test(groups = "checkout",
+            description = "Оформление и покупка товара с проверками",
             testName = "Тест покупки")
     @Description("Проверка всего процесса покупки: от добавления товара до подтверждения заказа")
     public void testCompletePurchaseWithChaining() {
