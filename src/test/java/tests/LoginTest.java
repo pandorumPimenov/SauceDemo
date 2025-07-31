@@ -35,8 +35,7 @@ public class LoginTest extends BaseTest {
         };
     }
 
-    @Test(groups = "authentication",
-            priority = 1,
+    @Test(priority = 1,
             description = "Проверка входа с валидными кредами",
             testName = "Позитивный тест входа")
     @Severity(SeverityLevel.BLOCKER)
@@ -55,8 +54,7 @@ public class LoginTest extends BaseTest {
         assertTrue(isOpened, "Страница продуктов не загрузилась после входа");
     }
 
-    @Test(groups = "authentication",
-            dataProvider = "EmptyPasswordData",
+    @Test(dataProvider = "EmptyPasswordData",
             priority = 2,
             description = "Проверка входа без пароля",
             testName = "Негативный тест: пустой пароль")
@@ -76,8 +74,7 @@ public class LoginTest extends BaseTest {
                 "Неверное сообщение об ошибке при пустом пароле");
     }
 
-    @Test(groups = "authentication",
-            dataProvider = "EmptyUsernameData",
+    @Test(dataProvider = "EmptyUsernameData",
             priority = 3,
             description = "Проверка входа без логина",
             testName = "Негативный тест: пустой логин")
@@ -96,8 +93,7 @@ public class LoginTest extends BaseTest {
         assertEquals(actualMessage, expectedMessage,
                 "Неверное сообщение об ошибке при пустом логине");
     }
-    @Test(groups = "authentication",
-            dataProvider = "InvalidCredentialsData",
+    @Test(dataProvider = "InvalidCredentialsData",
             priority = 4,
             description = "Проверка входа с неверными кредами",
             testName = "Негативный тест: невалидные данные")
